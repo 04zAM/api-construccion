@@ -45,7 +45,7 @@ const getActorById = async (req, res) => {
 
 // post actor_movie
 const postActorMovie = async (req, res) => {
-  const { id, movie, actor, state, actor_principal } = req.body;
+  const { id, movie, actor, actor_principal } = req.body;
   const response = await db.query(
     `INSERT INTO actor_movie(
       act_mov_id, mov_id, act_id, act_mov_state, act_mov_actor_principal)
