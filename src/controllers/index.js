@@ -80,7 +80,7 @@ const deleteActor = async (req, res) => {
 const getActoresByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(
-    `select * from actor inner join actor_movie on(act_id)
+    `select a.* from actor a inner join actor_movie on(act_id)
     inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
     [id]
   );
