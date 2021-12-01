@@ -14,7 +14,7 @@ const {
 
 //General
 router
-  .get("/", catalogoProductos)
+  .get("/", getHome)
   .get("/listar/:name", getListaByTable)
   .get("/api/ventas", getProductosStock)
   .put("/api/ventas/v", putStockProductoV)
