@@ -4,23 +4,23 @@ const router = Router();
 const {
   getHome,
   getListaByTable,
-  getProductosStock,
-  getProductosActivos,
-  putStockProductoC,
-  putStockProductoV,
-  getProductosActivosById,
-  catalogoProductos,
+  getActores,
+  postActores,
+  getActorById,
+  deleteActor,
+  getActoresByMovie,
+  getCountActByMovie,
 } = require("../controllers/index");
 
 //General
 router
   .get("/", getHome)
   .get("/listar/:name", getListaByTable)
-  .get("/api/ventas", getProductosStock)
-  .put("/api/ventas/v", putStockProductoV)
-  .get("/api/compras", getProductosActivos)
-  .put("/api/compras/c", putStockProductoC)
-  .get("/api/compras/p/:codigo", getProductosActivosById)
-  .get("/productos", catalogoProductos);
+  .get("/api/actores", getActores)
+  .post("/api/actores", postActores)
+  .get("/api/actorById/:id", getActorById)
+  .put("/api/actor/:id", deleteActor)
+  .get("/api/actoresByMovie/:id", getActoresByMovie)
+  .get("/api/countActoresByMovie/:id", getCountActByMovie);
 
 module.exports = router;
