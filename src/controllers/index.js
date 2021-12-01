@@ -38,8 +38,8 @@ const postActores = async (req, res) => {
 
 // actor por id
 const getActorById = async (req, res) => {
-  const { act_id } = req.params.name;
-  const response = await db.any(`select * from actor where act_id=$1;`, [act_id]);
+  const id = req.params.id;
+  const response = await db.any(`select * from actor where act_id=$1;`, [id]);
   res.json(response);
 };
 
@@ -62,7 +62,7 @@ const postActorMovie = async (req, res) => {
 
 //Actualizar Stock venta
 const deleteActor = async (req, res) => {
-  const { id } = req.params.name;
+  const {id} = req.body;
   const response = await db.query(
     `update actor set act_state=false 
   where act_id=$1;`,
@@ -78,7 +78,7 @@ const deleteActor = async (req, res) => {
 
 // productos activos con o sin stock
 const getActoresByMovie = async (req, res) => {
-  const codigo = req.params.name;
+  const id = req.params.id;
   const response = await db.any(
     `select * from actor inner join actor_movie on(act_id)
     inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
@@ -88,7 +88,7 @@ const getActoresByMovie = async (req, res) => {
 };
 
 const getCountActByMovie = async (req, res) => {
-  const codigo = req.params.id;
+  const id = req.params.id;
   const response = await db.any(
     `select count(*) from actor inner join actor_movie on(act_id)
     inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,

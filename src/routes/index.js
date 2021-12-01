@@ -19,10 +19,10 @@ router
   .get("/listar/:name", getListaByTable)
   .get("/api/actores", getActores)
   .post("/api/actores", postActores)
-  .get("/api/actorById/:name", getActorById)
+  .get("/api/actorById/:id", getActorById)
   .post("/api/actorMovie", postActorMovie)
-  .put("/api/actor/:id", deleteActor)
-  .get("/api/actoresByMovie/:name", getActoresByMovie)
-  .get("/api/countActoresByMovie/:name", getCountActByMovie);
+  .post("/api/actor", deleteActor)
+  .get("/api/actoresByMovie/:id", getActoresByMovie)
+  .get("/api/countActoresByMovie/:id", getCountActByMovie);
 
 module.exports = router;
