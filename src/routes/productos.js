@@ -1,17 +1,17 @@
 //Midlewares
 const { Router } = require("express"),
-  router = Router(),
-  multer = require("multer"),
-  storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "./src/public/images");
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
-  }),
-  upload = multer({ storage }),
-  uploadImage = upload.single("imagen");
+  router = Router();
+  // multer = require("multer"),
+  // storage = multer.diskStorage({
+  //   destination: (req, file, cb) => {
+  //     cb(null, "./src/public/images");
+  //   },
+  //   filename: (req, file, cb) => {
+  //     cb(null, file.originalname);
+  //   },
+  // }),
+  // upload = multer({ storage }),
+  // uploadImage = upload.single("imagen");
 
 // Controllers
 const {
@@ -37,10 +37,10 @@ router
 // Products
 router
   .get("/productos/create", createProductos)
-  .post("/productos/save", uploadImage, saveProductos)
+  // .post("/productos/save", uploadImage, saveProductos)
   .get("/productos/read", readProductos)
   .get("/productos/edit/:codigo", editProductos)
-  .post("/productos/update", upload.single("imagen"), updateProductos)
+  // .post("/productos/update", upload.single("imagen"), updateProductos)
   .get("/productos/desactivar/:codigo", desacProductos);
 
 // RESTful
