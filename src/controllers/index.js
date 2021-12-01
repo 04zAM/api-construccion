@@ -36,62 +36,65 @@ const postActores = async (req, res) => {
   });
 };
 
-//Actualizar Stock compra
+// actor por id
 const getActorById = async (req, res) => {
-  const { codigo, cantidad } = req.body;
+  const { act_id } = req.params.id;
+  const response = await db.any(`select * from actor where act_id=$1;`, [act_id]);
+  res.json(response);
+};
+
+// post actor_movie
+const postActorMovie = async (req, res) => {
+  const { id, movie, actor, state, actor_principal } = req.body;
   const response = await db.query(
-    `update detalles_bodega set stock=stock+$2 
-  where producto_id=$1;`,
-    [codigo, cantidad]
+    `INSERT INTO actor_movie(
+      act_mov_id, mov_id, act_id, act_mov_state, act_mov_actor_principal)
+      VALUES ($1, $2, $3, true, $4);`,
+    [id, movie, actor, actor_principal]
   );
   res.json({
-    message: "Producto sumado exitosamente",
+    message: "Actor Movie was created successfully",
     body: {
-      producto: { codigo, cantidad },
+      actor: { actor_principal },
     },
   });
 };
 
 //Actualizar Stock venta
 const deleteActor = async (req, res) => {
-  const { codigo, cantidad } = req.body;
+  const { id } = req.params.id;
   const response = await db.query(
-    `update detalles_bodega set stock=stock-$2 
-  where producto_id=$1;`,
-    [codigo, cantidad]
+    `update actor set act_state=false 
+  where act_id=$1;`,
+    [id]
   );
   res.json({
-    message: "Producto restado exitosamente",
+    message: "Actor Deleted Successfully",
     body: {
-      producto: { codigo, cantidad },
+      actor: { id },
     },
   });
 };
 
 // productos activos con o sin stock
 const getActoresByMovie = async (req, res) => {
-  const codigo = req.params.codigo;
+  const codigo = req.params.id;
   const response = await db.any(
-    `select * from productos where estado=true and producto_id=$1;`,
-    [codigo]
+    `select * from actor inner join actor_movie on(act_id)
+    inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
+    [id]
   );
   res.json(response);
 };
 
-//Catalogo
-// const catalogoProductos = async (req, res) => {
-//   const response = await db.any(
-//     `select nombre as articulo, precio_venta as pvp, case when stock is null then 0 else stock end 
-//       from productos left join detalles_bodega using (producto_id) order by producto_id desc limit 12;`
-//   );
-//   res.render("./pages/productos/", { response: response });
-// };
 const getCountActByMovie = async (req, res) => {
+  const codigo = req.params.id;
   const response = await db.any(
-    `select nombre as articulo, precio_venta as pvp, imagen, stock 
-      from productos inner join detalles_bodega using (producto_id) order by producto_id desc;`
+    `select count(*) from actor inner join actor_movie on(act_id)
+    inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
+    [id]
   );
-  res.render("./pages/productos/", { response: response });
+  res.json(response);
 };
 
 module.exports = {
@@ -100,6 +103,7 @@ module.exports = {
   getActores,
   postActores,
   getActorById,
+  postActorMovie,
   deleteActor,
   getActoresByMovie,
   getCountActByMovie,

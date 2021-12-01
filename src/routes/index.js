@@ -7,6 +7,7 @@ const {
   getActores,
   postActores,
   getActorById,
+  postActorMovie,
   deleteActor,
   getActoresByMovie,
   getCountActByMovie,
@@ -19,6 +20,7 @@ router
   .get("/api/actores", getActores)
   .post("/api/actores", postActores)
   .get("/api/actorById/:id", getActorById)
+  .post("/api/actorMovie", postActorMovie)
   .put("/api/actor/:id", deleteActor)
   .get("/api/actoresByMovie/:id", getActoresByMovie)
   .get("/api/countActoresByMovie/:id", getCountActByMovie);
