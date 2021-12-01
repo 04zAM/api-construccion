@@ -39,6 +39,7 @@ const postActores = async (req, res) => {
 // actor por id
 const getActorById = async (req, res) => {
   const id = req.params.id;
+  console.log(id);
   const response = await db.any(`select * from actor where act_id=$1;`, [id]);
   res.json(response);
 };
@@ -91,7 +92,8 @@ const getCountActByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(
     `select count(*) from actor a inner join actor_movie using(act_id)
-    inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
+    inner join movie using(mov_id) where a.act_state=true 
+    and act_mov_actor_principal=true and mov_id=$1;`,
     [id]
   );
   res.json(response);
