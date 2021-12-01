@@ -80,8 +80,8 @@ const deleteActor = async (req, res) => {
 const getActoresByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(
-    `select a.* from actor a inner join actor_movie on(act_id)
-    inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
+    `select a.* from actor a inner join actor_movie using(act_id)
+    inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
     [id]
   );
   res.json(response);
@@ -90,8 +90,8 @@ const getActoresByMovie = async (req, res) => {
 const getCountActByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(
-    `select count(*) from actor inner join actor_movie on(act_id)
-    inner join movie on(mov_id) where act_estate=true and mov_id=$1;`,
+    `select a.* from actor a inner join actor_movie using(act_id)
+    inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
     [id]
   );
   res.json(response);
