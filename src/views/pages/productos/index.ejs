@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ('../../partials/header') %>
+</head>
+
+<body>
+  <%- include ('../../partials/nav') %>
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <% response.forEach((producto)=>{ %>
+          <div class="col">
+            <div class="card h-100">
+              <img src="/images/<%= producto.imagen %>" class="card-img-top" alt="sin imagen">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= producto.articulo %>
+                </h5>
+                <p class="card-text">
+                  Precio Venta: <%= producto.pvp %>
+                </p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">
+                  Stock: <%= producto.stock %>
+                </small>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+      </div>
+    </div>
+    <%- include ('../../partials/foot') %>
+</body>
+
+</html>

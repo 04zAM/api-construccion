@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ('../../partials/header') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css">
+</head>
+<style>
+  .ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    list-style: none;
+    font-size: 16px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+  }
+
+  .ui-autocomplete>li>div {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+  }
+
+  .ui-state-hover,
+  .ui-state-active,
+  .ui-state-focus {
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+
+  .ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+</style>
+
+<body>
+  <%- include ('../../partials/nav') %>
+    <div class="container">
+      <form action="./save" method="POST">
+        <div class="row">
+          <div class="col-mx-12 col-md-2">
+            <label>TIPO INVENTARIO</label>
+            <select class="form-select" name="tipo_inventario" id="tipo_inventario">
+              <option value="1" selected>SUMAR</option>
+              <option value="2">REEMPLAZAR</option>
+            </select>
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="codigo">CÓDIGO</label>
+            <input type="text" name="codigo" id="codigo" placeholder="1" data-toggle="tooltip"
+              data-original-title="Leer..." class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-4">
+            <label for="producto">PRODUCTO</label>
+            <input type="text" name="producto" id="producto" placeholder="Agujas de mano" data-toggle="tooltip"
+              data-original-title="Buscar..." class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="cantidad">CANTIDAD</label>
+            <input type="number" min="0" name="cantidad" id="cantidad" class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="costo">COSTO</label>
+            <input type="number" step=".0001" min="0" name="costo" id="costo" class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="costo">PVP</label>
+            <input type="number" step=".01" min="0" name="pvp" id="pvp" class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="stock">STOCK</label>
+            <input type="number" min="0" name="stock" id="stock" readonly class="form-control" />
+            <input type="hidden" name="dif" id="dif" readonly class="form-control" />
+            <input type="hidden" name="id" id="id" value="<%= inventario.id %>" readonly class="form-control" />
+          </div>
+          <div class="col-mx-12 col-md-1">
+            <label for="agregar">AGREGAR</label>
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-success" name="agregar" id="agregar"><i
+                  class="fas fa-check"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <p></p>
+        </div>
+        <div class="row">
+          <div class="table-responsive">
+            <table id="detalle" class="table table-bordered table-striped text-center mt-4">
+              <thead>
+                <tr class="bg-secondary text-white">
+                  <th scope="col">CÓDIGO</th>
+                  <th scope="col">PRODUCTO</th>
+                  <th scope="col">COSTO</th>
+                  <th scope="col">PRECIO</th>
+                  <th scope="col">STOCK</th>
+                  <th scope="col">EXISTENCIA</th>
+                  <th scope="col">DIFERENCIA</th>
+                  <th scope="col">TIPO</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-mx-12 col-md-3">
+            <div class="form-group">
+              <label>Total Precio Costo:</label>
+              <input type="text" name="total_costo" id="total_costo" readonly class="form-control" />
+            </div>
+          </div>
+          <div class="col-mx-12 col-md-3">
+            <div class="form-group">
+              <label>Total Precio Venta:</label>
+              <input type="text" name="total_venta" id="total_venta" readonly class="form-control" />
+            </div>
+          </div>
+          <div class="col-mx-12 col-md-6">
+            <div class="form-group">
+              <label>Observaciones:</label>
+              <textarea name="observacion" id="observacion" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <p></p>
+        </div>
+        <div class="row">
+          <div class="col-mx-12 col-md-6">
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-primary" name="guardar" id="guardar"><i class="fas fa-save"></i>
+                GUARDAR INVENTARIO</button>
+            </div>
+          </div>
+          <div class="col-mx-12 col-md-6">
+            <div class="d-grid gap-2">
+              <a href="/inventarios/read" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <%- include ('../../partials/foot') %>
+      <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+      <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+      <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+      <script src="//cdn.datatables.net/plug-ins/1.10.25/api/sum().js"></script>
+      <script>
+
+        $(document).ready((e) => {
+          // con lector
+          // $("#codigo").focus();
+          // sin lector
+          $("#producto").focus();
+          var detalle = [];
+          $("#total_costo").val("0.0000");
+          $("#total_venta").val("0.00");
+
+          //autocomplete
+          $("#codigo").on("input", () => {
+            $.getJSON('/productos/get/c/' + $("#codigo").val(), (data) => {
+              if (data.length > 0) {
+                $("#producto").val(data[0].producto)
+                $("#costo").val(data[0].costo)
+                $("#pvp").val(data[0].pvp)
+                $("#stock").val(data[0].stock)
+              }
+            }, () => {
+              alert('server error occured');
+            });
+          });
+
+          $("#producto").autocomplete({
+            source: function (req, res) {
+              $.ajax({
+                url: '/productos/get/n/' + req.term,
+                dataType: 'json',
+                data: {},
+                success: function (data) {
+                  res(data);
+                }
+              });
+            },
+            scroll: true,
+            minLength: 2,
+            focus: function (evt, ui) {
+              $("#codigo").val(ui.item.codigo)
+              $("#producto").val(ui.item.producto)
+              $("#costo").val(ui.item.costo)
+              $("#pvp").val(ui.item.pvp)
+              $("#stock").val(ui.item.stock)
+              return false;
+            },
+            select: function (evt, ui) {
+              $("#codigo").val(ui.item.codigo)
+              $("#producto").val(ui.item.producto)
+              $("#costo").val(ui.item.costo)
+              $("#pvp").val(ui.item.pvp)
+              $("#stock").val(ui.item.stock)
+              $("#cantidad").focus();
+              return false;
+            }
+          }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li>")
+              .append("<div>" + item.producto + "</div>")
+              .appendTo(ul);
+          };
+
+          //cambiando idioma de datatable
+          var table = $('#detalle').DataTable({
+            "language": {
+              "decimal": ".",
+              "emptyTable": "Sin datos",
+              "infoFiltered": "(filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": "",
+              "lengthMenu": "Mostrando _MENU_ entradas por página",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "paginate": {
+                "first": "Primera",
+                "last": "Última",
+                "next": "Siguiente",
+                "previous": "Anterior"
+              },
+              "aria": {
+                "sortAscending": ": activar para ordenar columna ascendentemente",
+                "sortDescending": ": activar para ordenar columna descendentemente"
+              },
+              "zeroRecords": "No se encuentra - lo sentimos",
+              "info": "Mostrando página _PAGE_ de _PAGES_",
+              "infoEmpty": "Sin entradas disponibles"
+            }
+          });
+
+          $('#detalle tbody').on('click', 'button.eliminar', function () {
+            table
+              .row($(this).parents('tr'))
+              .remove()
+              .draw();
+            recalcular();
+          });
+
+          const recalcular = () => {
+            let tc = table.column(2).data().sum();
+            $("#total_costo").val(tc);
+            let tv = table.column(3).data().sum();
+            $("#total_venta").val(tv);
+          }
+
+          $('#agregar').on('click', () => {
+            if ($("#codigo").val() !== "") {
+              let dif;
+              let tipo_inventario = $("#tipo_inventario").val();
+              if (tipo_inventario == 1) {
+                dif = parseFloat($("#cantidad").val()) + parseFloat($("#stock").val());
+              } else {
+                dif = parseFloat($("#cantidad").val()) - parseFloat($("#stock").val());
+              }
+              let costo = parseFloat($("#cantidad").val()) * parseFloat($("#costo").val())
+              let venta = parseFloat($("#cantidad").val()) * parseFloat($("#pvp").val())
+
+              //dibujando la tabla
+              let dataSet = [
+                $("#codigo").val(),
+                $("#producto").val(),
+                costo,
+                venta,
+                $("#cantidad").val(),
+                $("#stock").val(),
+                dif,
+                tipo_inventario,
+                "<button type='button' class='eliminar btn btn-danger'><i class='fas fa-trash'></i></button>"
+              ];
+              table.row.add(dataSet).draw(false);
+
+              //agregando detalle
+              let json = {
+                producto_id: $("#codigo").val(),
+                precio_costo: costo,
+                precio_venta: venta,
+                conteo: $("#cantidad").val(),
+                stock: $("#stock").val(),
+                ajuste: dif,
+                tipo: tipo_inventario
+              }
+              detalle.push(json);
+
+              //calculando totales
+              recalcular();
+
+              setTimeout(() => {
+                limpiar()
+              }, 500);
+            } else {
+              alert("Seleccione un producto");
+              $("#codigo").focus();
+            }
+          });
+
+          //enter
+          $("#codigo").on("keypress", (e) => {
+            if (e.which == 13 || e.keyCode === 13) {
+              $("#cantidad").focus();
+              return false;
+            }
+          });
+          $("#producto").on("keypress", (e) => {
+            if (e.which == 13 || e.keyCode === 13) {
+              $("#cantidad").focus();
+              return false;
+            }
+          });
+          $("#cantidad").on("keypress", (e) => {
+            if (e.which == 13 || e.keyCode === 13) {
+              if ($("#cantidad").val() === "") {
+                $("#cantidad").val("1")
+              }
+              $("#agregar").focus();
+              return false;
+            }
+          });
+          $("#guardar").on("keypress", (e) => {
+            if (e.which == 13 || e.keyCode === 13) {
+              guardar(detalle);
+              return false;
+            }
+          });
+
+          //click
+          $('#guardar').on('click', () => {
+            guardar(detalle);
+          })
+
+        });
+
+        const limpiar = () => {
+          $("#codigo").val("")
+          $("#producto").val("")
+          $("#costo").val("")
+          $("#pvp").val("")
+          $("#cantidad").val("")
+          $("#stock").val("")
+          $("#codigo").focus()
+        }
+
+        const guardar = (det) => {
+          if (det.length > 0) {
+            $.ajax({
+              type: "POST",
+              url: "./save",
+              dataType: "json",
+              data: {
+                id: $("#id").val(), total_costo: $("#total_costo").val(), total_venta: $("#total_venta").val(),
+                observacion: $("#observacion").val(), detalles: { det }
+              }
+            });
+            setTimeout(function () {
+              alert("Inventario Guardado");
+              window.location.replace("./read");
+            }, 500);
+          } else {
+            alert("Inventario no Guardado");
+            window.location.reload();
+          }
+        }
+      </script>
+</body>
+
+</html>
