@@ -13,7 +13,7 @@ const {
   getCountActByMovie,
 } = require("../controllers/index");
 
-//General
+// Rutas
 router
   .get("/", getHome)
   .get("/listar/:name", getListaByTable)

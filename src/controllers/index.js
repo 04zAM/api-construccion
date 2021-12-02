@@ -1,9 +1,11 @@
 const { db } = require("../cnn");
 
+// Pagina inicial
 const getHome = (req, res) => {
   res.render("./pages/index");
 };
 
+// Lista Cualquier Tabla
 const getListaByTable = async (req, res) => {
   const name = req.params.name;
   const response = await db.any(`select * from $1:name;`, [name]);
@@ -61,7 +63,7 @@ const postActorMovie = async (req, res) => {
   });
 };
 
-//Actualizar Stock venta
+// delete actor
 const deleteActor = async (req, res) => {
   const {id} = req.body;
   const response = await db.query(
@@ -77,7 +79,7 @@ const deleteActor = async (req, res) => {
   });
 };
 
-// productos activos con o sin stock
+// get actors by movie
 const getActoresByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(
@@ -88,6 +90,7 @@ const getActoresByMovie = async (req, res) => {
   res.json(response);
 };
 
+// get count actors by movie
 const getCountActByMovie = async (req, res) => {
   const id = req.params.id;
   const response = await db.any(

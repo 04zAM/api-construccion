@@ -3,7 +3,7 @@ const pgPromise = require("pg-promise");
 const config = {
   host: "localhost",
   port: "5432",
-  database: "app-distribuidas",
+  database: "examen-construccion",
   user: "postgres",
   password: "root",
   ssl: false,
