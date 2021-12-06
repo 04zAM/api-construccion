@@ -96,8 +96,8 @@ const getActoresByMovie = async (req, res) => {
 const getMovieDetails = async (req, res) => {
   const id = req.params.id;
   let response = {
-    id: await db.any(`select mov_id from movie where mov_id=$1`, [id]).mov_id,
-    title: await db.any(`select mov_title from movie where mov_id=$1`, [id]).mov_title,
+    id: await db.any(`select mov_id from movie where mov_id=$1`, [id]),
+    title: await db.any(`select mov_title from movie where mov_id=$1`, [id]),
     actors: await db.any(
       `select a.* from actor a inner join actor_movie using(act_id)
       inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
