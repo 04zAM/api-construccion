@@ -33,7 +33,9 @@ const postActores = async (req, res) => {
   res.json({
     message: "Actor was created successfully",
     body: {
-      actor: { act_name },
+      actor: { act_id,
+        act_name,
+      act_country },
     },
   });
 };
