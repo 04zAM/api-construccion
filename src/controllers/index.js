@@ -60,7 +60,7 @@ const postActorMovie = async (req, res) => {
   res.json({
     message: "Actor Movie was created successfully",
     body: {
-      actor: { actor_principal },
+      actor: { movie, actor, actor_principal },
     },
   });
 };
