@@ -92,6 +92,18 @@ const getActoresByMovie = async (req, res) => {
   res.json(response);
 };
 
+// get actors by movie
+const getMovieDetails = async (req, res) => {
+  const id = req.params.id;
+  let response =await db.any(`select mov_id, mov_name from movie where mov_id=$1`, [id]);
+  response.push(await db.any(
+    `select a.* from actor a inner join actor_movie using(act_id)
+    inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
+    [id]
+  ))
+  res.json(response);
+};
+
 // get count actors by movie
 const getCountActByMovie = async (req, res) => {
   const id = req.params.id;
@@ -114,4 +126,5 @@ module.exports = {
   deleteActor,
   getActoresByMovie,
   getCountActByMovie,
+  getMovieDetails,
 };

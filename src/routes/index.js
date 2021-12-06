@@ -11,6 +11,7 @@ const {
   deleteActor,
   getActoresByMovie,
   getCountActByMovie,
+  getMovieDetails,
 } = require("../controllers/index");
 
 // Rutas
@@ -23,6 +24,7 @@ router
   .post("/api/actorMovie", postActorMovie)
   .post("/api/actor", deleteActor)
   .get("/api/actoresByMovie/:id", getActoresByMovie)
-  .get("/api/countActoresByMovie/:id", getCountActByMovie);
+  .get("/api/countActoresByMovie/:id", getCountActByMovie)
+  .get("/api/movieDetailed/:id", getMovieDetails);
 
 module.exports = router;
