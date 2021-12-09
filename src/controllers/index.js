@@ -96,16 +96,16 @@ const getActoresByMovie = async (req, res) => {
 const getMovieDetails = async (req, res) => {
   let response = [];
   let movies = await db.any(`select mov_id, mov_title from movie`);
-  for (const movie in movies) {
-    if (Object.hasOwnProperty.call(movies, movie)) {
-      const element = movies[movie];
+  for (const index in movies) {
+    if (Object.hasOwnProperty.call(movies, index)) {
+      let movie = movies[index];
       let actors = await db.any(
         `select a.* from actor a inner join actor_movie using(act_id)
         inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
-        [element.mov_id]
+        [movie.mov_id]
       )
-      element = [...actors];
-      response.push(element);
+      movie = [...actors];
+      response.push(movie);
       console.log(response);
     }
   }
