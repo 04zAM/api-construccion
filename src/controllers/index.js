@@ -95,17 +95,16 @@ const getActoresByMovie = async (req, res) => {
 // get movies with its actors
 const getMovieDetails = async (req, res) => {
   let response = [];
-  let movies = await db.any(`select mov_id, mov_title from movie`).then(
-    movies.map(async (movie) => {
-      let actors = await db.any(
-        `select a.* from actor a inner join actor_movie using(act_id)
-        inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
-        [movie.mov_id]
-      )
-      response.push(movie.mov_id, movie.mov_title, actors);
-    })
-  );
-  res.json(response);
+  let movies = await db.any(`select mov_id, mov_title from movie`);
+  await movies.map(async (movie) => {
+    let actors = await db.any(
+      `select a.* from actor a inner join actor_movie using(act_id)
+      inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
+      [movie.mov_id]
+    )
+    await response.push(movie.mov_id, movie.mov_title, actors);
+  });
+  await res.json(response);
 };
 
 // get count actors by movie
