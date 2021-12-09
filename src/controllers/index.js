@@ -102,9 +102,10 @@ const getMovieDetails = async (req, res) => {
       inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
       [movie.mov_id]
     )
-    await response.push(movie.mov_id, movie.mov_title, actors);
+    response.json(movie.mov_id, movie.mov_title, actors);
+    console.log(response);
   });
-  await res.json(response);
+  res.json(response);
 };
 
 // get count actors by movie
