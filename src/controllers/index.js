@@ -102,7 +102,7 @@ const getMovieDetails = async (req, res) => {
       inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
       [movie.mov_id]
     )
-    response.push(movie.mov_id, movie.mov_title, actors);
+    await response.push(movie.mov_id, movie.mov_title, actors);
   });
   res.json(response);
 };
