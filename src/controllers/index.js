@@ -102,7 +102,7 @@ const getMovieDetails = async (req, res) => {
       let actors = await db.any(
         `select a.* from actor a inner join actor_movie using(act_id)
         inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
-        [movie.mov_id]
+        [element.mov_id]
       )
       response.push(element, actors);
       console.log(response);
