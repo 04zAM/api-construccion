@@ -92,18 +92,21 @@ const getActoresByMovie = async (req, res) => {
   res.json(response);
 };
 
-// get actors by movie
+// get movies with its actors
 const getMovieDetails = async (req, res) => {
-  const id = req.params.id;
   let response = [];
-  response.push(
-    await db.any(`select mov_id, mov_title from movie where mov_id=$1`, [id]),
-    await db.any(
+  let movies = await db.any(`select mov_id, mov_title from movie`);
+  movies.map((movie) => {
+    response.push(movie.mov_id, movie.mov_title);
+    let actors = await db.any(
       `select a.* from actor a inner join actor_movie using(act_id)
       inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
-      [id]
+      [movie.mov_id]
     )
-  )
+    response.push(
+      actors
+    )
+  });
   res.json(response);
 };
 
