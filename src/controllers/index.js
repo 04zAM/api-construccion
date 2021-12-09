@@ -94,7 +94,7 @@ const getActoresByMovie = async (req, res) => {
 
 // get movies with its actors
 const getMovieDetails = async (req, res) => {
-  let response;
+  let response = {};
   let movies = await db.any(`select mov_id, mov_title from movie`);
   for (const index in movies) {
     if (Object.hasOwnProperty.call(movies, index)) {
@@ -105,7 +105,7 @@ const getMovieDetails = async (req, res) => {
         [movie.mov_id]
       )
       console.log(movie);
-      response.json(movie, actors);
+      response.push({movie, actors:actors});
       console.log(response);
     }
   }
