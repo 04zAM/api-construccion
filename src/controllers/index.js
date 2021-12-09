@@ -94,7 +94,7 @@ const getActoresByMovie = async (req, res) => {
 
 // get movies with its actors
 const getMovieDetails = async (req, res) => {
-  let response = [];
+  let response;
   let movies = await db.any(`select mov_id, mov_title from movie`);
   for (const index in movies) {
     if (Object.hasOwnProperty.call(movies, index)) {
@@ -104,8 +104,8 @@ const getMovieDetails = async (req, res) => {
         inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
         [movie.mov_id]
       )
-      movie = [...actors];
-      response.push(movie);
+      movie.push(actors);
+      response.json(movie);
       console.log(response);
     }
   }
