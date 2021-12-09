@@ -25,6 +25,6 @@ router
   .post("/api/actor", deleteActor)
   .get("/api/actoresByMovie/:id", getActoresByMovie)
   .get("/api/countActoresByMovie/:id", getCountActByMovie)
-  .get("/api/movieDetailed/:id", getMovieDetails);
+  .get("/api/movieDetailed", getMovieDetails);
 
 module.exports = router;
