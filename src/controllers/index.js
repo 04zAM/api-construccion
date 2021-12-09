@@ -105,9 +105,7 @@ const getMovieDetails = async (req, res) => {
         [movie.mov_id]
       )
       movie.actors = actors;
-      console.log(movie);
       response.push(movie);
-      console.log(response);
     }
   }
   res.json(response);
