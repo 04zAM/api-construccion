@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const router = Router();
 
+const { graphqlExpress, graphiqlExpress } = require("graphql-server-express");
+
 const {
   getHome,
   getListaByTable,
@@ -12,6 +14,7 @@ const {
   getActoresByMovie,
   getCountActByMovie,
   getMovieDetails,
+  schema,
 } = require("../controllers/index");
 
 // Rutas
@@ -25,6 +28,9 @@ router
   .post("/api/actor", deleteActor)
   .get("/api/actoresByMovie/:id", getActoresByMovie)
   .get("/api/countActoresByMovie/:id", getCountActByMovie)
-  .get("/api/movieDetailed", getMovieDetails);
+  .get("/api/movieDetailed", getMovieDetails)
+  // GraphQL
+  .post("/graphql/movie", graphqlExpress({ schema }))
+  .get("/graphql/graphiql", graphiqlExpress({ endpointURL: "/graphql/movie" }));
 
 module.exports = router;

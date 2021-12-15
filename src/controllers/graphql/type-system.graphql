@@ -1,0 +1,56 @@
+#TYPE-SYSTEM
+
+type Query {
+  actors(name: String): [actor]
+}
+
+type Query {
+  movies(title: String): [movie]
+}
+
+type Mutation {
+  createActor(actor: actorInput): actor
+  createMovie(movie: movieInput): movie
+  updateMovie(movie: movieUpdate): movie
+  deleteMovie(movie: movieUpdate): movie
+}
+
+input movieInput {
+  mov_title: String
+  mov_produce: String
+  actors: [Int]
+}
+
+input movieUpdate {
+  mov_id: Int!
+  mov_title: String
+  mov_produce: String
+  actors: [Int]
+}
+
+input actorInput {
+  act_name: String
+  act_country: String
+}
+
+input actorUpdate {
+  act_id: Int!
+  act_name: String
+  act_country: String
+  actors: [Int]
+}
+
+type movie {
+  mov_id: Int!
+  mov_title: String
+  mov_produce: String
+  mov_state: Boolean
+  actors: [actor]
+}
+
+type actor {
+  act_id: Int!
+  act_name: String
+  act_country: String
+  act_state: Boolean
+}

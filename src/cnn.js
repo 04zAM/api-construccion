@@ -1,17 +1,17 @@
 const pgPromise = require("pg-promise");
 
+let ssl = { rejectUnauthorized: false };
+
 const config = {
-  host: "localhost",
+  host: "ec2-34-224-239-147.compute-1.amazonaws.com",
   port: "5432",
-  database: "examen-construccion",
-  user: "postgres",
-  password: "root",
-  ssl: false,
+  database: "ddpenflqbattk5",
+  user: "hjizsgtokyjdfa",
+  ssl: ssl,
 };
 
 //Working with Conexion Strings
 const pgp = pgPromise({});
-pgp.pg.defaults.ssl = true;
 const db = pgp(process.env.DATABASE_URL || config);
 
 exports.db = db;

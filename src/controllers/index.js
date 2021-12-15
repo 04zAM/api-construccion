@@ -1,5 +1,17 @@
 const { db } = require("../cnn");
 
+// GraphQL
+const { importSchema } = require("graphql-import");
+const { makeExecutableSchema } = require("graphql-tools");
+const typeDefs = importSchema("./src/controllers/graphql/type-system.graphql");
+const resolvers = require("./graphql/resolver");
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
+// REST
+
 // Pagina inicial
 const getHome = (req, res) => {
   res.render("./pages/index");
@@ -15,9 +27,7 @@ const getListaByTable = async (req, res) => {
 //API's Salida
 // get actor
 const getActores = async (req, res) => {
-  const response = await db.any(
-    `select * from actor where act_state=true;`
-  );
+  const response = await db.any(`select * from actor where act_state=true;`);
   res.json(response);
 };
 
@@ -33,9 +43,7 @@ const postActores = async (req, res) => {
   res.json({
     message: "Actor was created successfully",
     body: {
-      actor: { act_id,
-        act_name,
-      act_country },
+      actor: { act_id, act_name, act_country },
     },
   });
 };
@@ -67,7 +75,7 @@ const postActorMovie = async (req, res) => {
 
 // delete actor
 const deleteActor = async (req, res) => {
-  const {id} = req.body;
+  const { id } = req.body;
   const response = await db.query(
     `update actor set act_state=false 
   where act_id=$1;`,
@@ -103,7 +111,7 @@ const getMovieDetails = async (req, res) => {
         `select a.* from actor a inner join actor_movie using(act_id)
         inner join movie using(mov_id) where a.act_state=true and mov_id=$1;`,
         [movie.mov_id]
-      )
+      );
       movie.actors = actors;
       response.push(movie);
     }
@@ -134,4 +142,7 @@ module.exports = {
   getActoresByMovie,
   getCountActByMovie,
   getMovieDetails,
+  // GraphQL
+  db,
+  schema,
 };
