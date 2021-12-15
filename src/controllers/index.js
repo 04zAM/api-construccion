@@ -143,6 +143,5 @@ module.exports = {
   getCountActByMovie,
   getMovieDetails,
   // GraphQL
-  db,
   schema,
 };

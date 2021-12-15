@@ -1,43 +1,35 @@
 #TYPE-SYSTEM
 
 type Query {
-  actors(name: String): [actor]
-}
-
-type Query {
-  movies(title: String): [movie]
+  # Consultar datos de los actores
+  # Consultar datos de actores por su id
+  getActors(act_id: Int): [actor]
+  # Consultar datos de actores de una película por su id
+  getActorsByMovie(mov_id: Int): [actor]
+  # Consultar cuantos actores principales tiene una película por su id
+  getPrincipalActorsByMovie(mov_id: Int): counter
 }
 
 type Mutation {
-  createActor(actor: actorInput): actor
-  createMovie(movie: movieInput): movie
-  updateMovie(movie: movieUpdate): movie
-  deleteMovie(movie: movieUpdate): movie
-}
-
-input movieInput {
-  mov_title: String
-  mov_produce: String
-  actors: [Int]
-}
-
-input movieUpdate {
-  mov_id: Int!
-  mov_title: String
-  mov_produce: String
-  actors: [Int]
+  # Insertar datos de los actores
+  setActor(actor: actorInput): actor
+  # Asignar actor a una película
+  setMovieActor(actor_movie: actorMovieInput): actor_movie
+  # Eliminar actor de una película
+  setStateMovieActor(act_id: Int, mov_id: Int): Int
 }
 
 input actorInput {
+  act_id: Int!
   act_name: String
   act_country: String
 }
 
-input actorUpdate {
+input actorMovieInput {
+  act_mov_id: Int!
   act_id: Int!
-  act_name: String
-  act_country: String
-  actors: [Int]
+  mov_id: Int!
+  principal: Boolean
 }
 
 type movie {
@@ -53,4 +45,14 @@ type actor {
   act_name: String
   act_country: String
   act_state: Boolean
+}
+
+type actor_movie {
+  act_id: Int!
+  mov_id: Int!
+  act_mov_actor_principal: Boolean
+}
+
+type counter {
+  count: Int
 }
