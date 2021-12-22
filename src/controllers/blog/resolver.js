@@ -1,6 +1,6 @@
 const { db } = require("../../cnn");
 
-const resolver = {
+module.exports = resolvers = {
   Query: {
     async getPublicaciones(root, { act_id }) {
       try {
@@ -84,5 +84,3 @@ const resolver = {
     },
   },
 };
-
-module.exports = { resolver };

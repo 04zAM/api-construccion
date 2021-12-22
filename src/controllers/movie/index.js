@@ -4,10 +4,10 @@ const { db } = require("../../cnn");
 const { importSchema } = require("graphql-import");
 const { makeExecutableSchema } = require("graphql-tools");
 const typeDefs = importSchema("./src/controllers/movie/type-system.graphql");
-const { resolver } = require("./resolver");
+const resolvers = require("./resolver");
 const movie_schema = makeExecutableSchema({
   typeDefs,
-  resolver,
+  resolvers,
 });
 
 // Rest
