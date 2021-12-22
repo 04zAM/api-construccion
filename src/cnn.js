@@ -13,6 +13,7 @@ const config = {
 
 //Working with Conexion Strings
 const pgp = pgPromise({});
+// Produccion o Local
 const db = pgp(process.env.DATABASE_URL || config);
 
 exports.db = db;

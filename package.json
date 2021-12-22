@@ -1,7 +1,7 @@
 {
-  "name": "api-inventario",
+  "name": "api-construccion",
   "version": "1.0.0",
-  "description": "api para control de inventarios",
+  "description": "API",
   "main": "./src",
   "scripts": {
     "start": "node src",
@@ -9,25 +9,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/04zAM/api_inventario.git"
+    "url": "git+https://github.com/04zAM/api_construccion.git"
   },
   "keywords": [
-    "inventario",
     "api"
   ],
   "author": "zAMi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/04zAM/api_inventario/issues"
+    "url": "https://github.com/04zAM/api_construccion/issues"
   },
-  "homepage": "https://github.com/04zAM/api_inventario#readme",
+  "homepage": "https://github.com/04zAM/api_construccion#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "graphql": "^15.8.0",
     "graphql-import": "^0.7.1",
-    "graphql-server-express": "^1.0.0",
+    "graphql-server-express": "^1.4.1",
     "graphql-tools": "^8.2.0",
     "path": "^0.12.7",
     "pg-promise": "^10.11.1",

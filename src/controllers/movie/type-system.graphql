@@ -1,5 +1,6 @@
-#TYPE-SYSTEM
+# TYPE-SYSTEM
 
+# Movies
 type Query {
   # Consultar datos de los actores
   # Consultar datos de actores por su id

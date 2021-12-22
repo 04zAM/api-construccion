@@ -1,6 +1,6 @@
 const { db } = require("../../cnn");
 
-const movieResolver = {
+const resolver = {
   Query: {
     async getActors(root, { act_id }) {
       try {
@@ -85,4 +85,4 @@ const movieResolver = {
   },
 };
 
-module.exports = movieResolver;
+module.exports = { resolver };
