@@ -4,9 +4,7 @@ module.exports = resolvers = {
   Query: {
     async getPublicaciones(root) {
       try {
-        const sql = await db.any(`select * from publicacion order by pub_id`);
-        console.table(sql);
-        return sql;
+        return await db.any(`select * from publicacion order by pub_id`);
       } catch (error) {
         console.log(error);
         return null;
@@ -14,9 +12,7 @@ module.exports = resolvers = {
     },
     async getComentarios(root) {
       try {
-        const sql = await db.any(`select * from comentario order by com_id`);
-        console.table(sql);
-        return sql;
+        return await db.any(`select * from comentario order by com_id`);
       } catch (error) {
         console.log(error);
         return null;
@@ -26,12 +22,11 @@ module.exports = resolvers = {
       try {
         const autores = await db.any(`select * from autor order by aut_id`);
         autores.forEach((autor) => {
-          const subsql = db.any(`select * from publicacion where aut_id=$1`, [
-            autor.aut_id,
-          ]);
-          autor.publicaciones = subsql;
+          autor.publicaciones = db.any(
+            `select * from publicacion where aut_id=$1`,
+            [autor.aut_id]
+          );
         });
-        console.table(autores);
         return autores;
       } catch (error) {
         console.log(error);
@@ -43,13 +38,25 @@ module.exports = resolvers = {
         const publicaciones = await db.any(
           `select * from publicacion order by pub_id`
         );
-        publicaciones.forEach((publicacion) => {
-          const subsql = db.any(`select * from comentario where pub_id=$1`, [
-            publicacion.pub_id,
-          ]);
-          publicacion.comentarios = subsql;
-        });
-        console.table(publicaciones);
+        for (const key in publicaciones) {
+          if (Object.hasOwnProperty.call(publicaciones, key)) {
+            const publicacion = publicaciones[key];
+            const comentarios = await db.any(
+              `select * from comentario where pub_id=$1`,
+              [publicacion.pub_id]
+            );
+            publicacion.comentarios = comentarios;
+            for (const key in comentarios) {
+              if (Object.hasOwnProperty.call(comentarios, key)) {
+                const comentario = comentarios[key];
+                comentario.autor = await db.one(
+                  `select a.* from autor a inner join comentario c using(aut_id) where c.com_id=$1`,
+                  [comentario.com_id]
+                );
+              }
+            }
+          }
+        }
         return publicaciones;
       } catch (error) {
         console.log(error);
@@ -62,13 +69,11 @@ module.exports = resolvers = {
           `select * from publicacion order by pub_id`
         );
         publicaciones.forEach((publicacion) => {
-          const subsql = db.one(
+          publicacion.num_comentarios = db.one(
             `select count(*) from comentario where pub_id=$1`,
             [publicacion.pub_id]
           );
-          publicacion.num_comentarios = subsql;
         });
-        console.table(publicaciones);
         return publicaciones;
       } catch (error) {
         console.log(error);
@@ -128,23 +133,20 @@ module.exports = resolvers = {
                 for (const key in comentarios) {
                   if (Object.hasOwnProperty.call(comentarios, key)) {
                     const comentario = comentarios[key];
-                    const num_likes = await db.one(
+                    comentario.num_likesnum_likes = await db.one(
                       `select count(*) from reaccion where com_id=$1 and rea_like=true`,
                       [comentario.com_id]
                     );
-                    comentario.num_likes = num_likes;
                   }
                 }
-                const num_autores = await db.one(
+                publicacion.num_autores = await db.one(
                   `select count(distinct aut_id) from comentario where pub_id=$1`,
                   [publicacion.pub_id]
                 );
-                publicacion.num_autores = num_autores;
               }
             }
           }
         }
-        console.log(categorias);
         return categorias;
       } catch (error) {
         console.log(error);
@@ -157,26 +159,22 @@ module.exports = resolvers = {
         for (const key in autores) {
           if (Object.hasOwnProperty.call(autores, key)) {
             const autor = autores[key];
-            const num_publicaciones = await db.one(
+            autor.num_publicaciones = await db.one(
               `select count(*) from publicacion where aut_id=$1`,
               [autor.aut_id]
             );
-            autor.num_publicaciones = num_publicaciones;
-            const categorias = await db.any(
+            autor.categorias = await db.any(
               `select distinct(cat_id), c.* from publicacion p inner join categoria c using (cat_id)
               where p.aut_id=$1`,
               [autor.aut_id]
             );
-            autor.categorias = categorias;
-            const num_likes = await db.one(
+            autor.num_likes = await db.one(
               `select count(*) from comentario com inner join reaccion rea using (com_id) 
               where rea.rea_like=true and com.aut_id=$1`,
               [autor.aut_id]
             );
-            autor.num_likes = num_likes;
           }
         }
-        console.table(autores);
         return autores;
       } catch (error) {
         console.log(error);
@@ -185,42 +183,35 @@ module.exports = resolvers = {
     },
   },
   Mutation: {
-    async setComentarioPub(root, { actor }) {
+    async setComentarioPub(root, { comentario }) {
       try {
         return await db.one(
-          `INSERT INTO actor(act_id, act_name, act_country, act_state)
-          VALUES($1,$2,$3, true) returning *;`,
-          [actor.act_id, actor.act_name, actor.act_country]
+          `INSERT INTO comentario(com_descripcion, com_estado, aut_id, pub_id)
+          VALUES($1,true, $2, $3) returning *;`,
+          [comentario.com_descripcion, comentario.aut_id, comentario.pub_id]
         );
       } catch (error) {
         console.log(error);
         return null;
       }
     },
-    async updateComentarioPub(root, { actor_movie }) {
+    async updateComentarioPub(root, { parametros, comentario }) {
       try {
         return await db.one(
-          `INSERT INTO actor_movie(act_mov_id, act_id, mov_id, act_mov_state, act_mov_actor_principal)
-          VALUES ($1, $2, $3, true, $4) returning *;`,
-          [
-            actor_movie.act_mov_id,
-            actor_movie.act_id,
-            actor_movie.mov_id,
-            actor_movie.principal,
-          ]
+          `UPDATE comentario SET com_descripcion=$1 where com_id=$2 and pub_id=$3 returning *;`,
+          [comentario, parametros.com_id, parametros.pub_id]
         );
       } catch (error) {
         console.log(error);
         return null;
       }
     },
-    async deleteComentarioPub(root, { act_id, mov_id }) {
+    async deleteComentarioPub(root, { parametros }) {
       try {
-        await db.any(
-          `UPDATE actor_movie SET act_mov_state=false where act_id=$1 and mov_id=$2 returning *;`,
-          [act_id, mov_id]
+        return await db.one(
+          `UPDATE comentario SET com_estado=false where com_id=$1 and pub_id=$2 returning *;`,
+          [parametros.com_id, parametros.pub_id]
         );
-        return mov_id;
       } catch (error) {
         console.log(error);
         return null;

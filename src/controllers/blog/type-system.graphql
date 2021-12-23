@@ -23,16 +23,22 @@ type Query {
 
 type Mutation {
   # Insertar comentario de una publicación
-  setComentarioPub(comentario: comentarioPub): comentario
+  setComentarioPub(comentario: comentarioInput): comentario
   # Actualizar el comentario de una publicación
-  updateComentarioPub(comentario: comentarioPub): comentario
+  updateComentarioPub(parametros: parametros, comentario: String): comentario
   # Eliminar comentario de una publicación
-  deleteComentarioPub(comentario: comentarioPub): publicacion
+  deleteComentarioPub(parametros: parametros): comentario
 }
 
-input comentarioPub {
-  id_pub: Int!
-  id_comentario: Int!
+input parametros {
+  pub_id: Int
+  com_id: Int
+}
+
+input comentarioInput{
+  com_descripcion: String
+  aut_id: Int
+  pub_id: Int
 }
 
 type autor {
@@ -40,6 +46,7 @@ type autor {
   aut_usuario: String
   aut_nombre: String
   aut_estado: Boolean
+  publicaciones: [publicacion]
   categorias: [categoria]
   num_publicaciones: counter
   num_likes: counter
@@ -60,6 +67,7 @@ type comentario {
   aut_id: Int
   pub_id: Int
   num_likes: counter
+  autor: autor
 }
 
 type publicacion {
