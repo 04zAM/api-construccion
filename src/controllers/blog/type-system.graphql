@@ -2,21 +2,23 @@
 
 type Query {
   # Consulta publicaciones y comentarios
-  getPublicaciones: publicacion
-  getComentarios: comentario
+  getPublicaciones: [publicacion]
+  getComentarios: [comentario]
   # Consulta Autores y sus publicaciones
-  getAutorPubs: autor_pubs
+  getAutorPubs: [autor]
   # Consulta comentarios de una publicación
-  getPublicacionComs: publicacion_coms
+  getPublicacionComs: [publicacion]
   # Consulta publicaciones y su número de comentarios
-  getPublicacionNumComs: publicacion_num_coms
+  getPublicacionNumComs: [publicacion]
   # Consulta Publicación, comentarios, número de likes por comentarios
   # Parámetro: Id Publicación
-  getPublicacionComLs(id: Int): publicacion_coms_ls
+  getPublicacionComLs(id: Int): publicacion
   # Consulta categorías, publicación, comentarios, número de likes por comentario
-  getCategoriaPub: categoria_pub
+  # Campos: Categoría, Título Publicación, Comentario, Número de likes, número de autores de comentarios
+  getCategoriaPub: [categoria]
   # Consulta de autores, categorías, número de publicación, número de sus likes.
-  getCategoriaPub2: categoria_pub2
+  # Campos: autores, categorías, número de publicación, número de sus likes.
+  getAutorResumen: [autor]
 }
 
 type Mutation {
@@ -30,85 +32,56 @@ type Mutation {
 
 input comentarioPub {
   id_pub: Int!
-  comentario: comentario
+  id_comentario: Int!
 }
 
 type autor {
-  id: Int!
-  usuario: String
-  nombre: String
-  estado: Boolean
+  aut_id: Int!
+  aut_usuario: String
+  aut_nombre: String
+  aut_estado: Boolean
+  categorias: [categoria]
+  num_publicaciones: counter
+  num_likes: counter
 }
 
 type categoria {
-  id: Int!
-  titulo: String
-  estado: Boolean
+  cat_id: Int!
+  cat_titulo: String
+  cat_estado: Boolean
+  publicaciones: [publicacion]
+  num_publicaciones: counter
 }
 
 type comentario {
-  id: Int!
-  descripcion: String
-  estado: Boolean
+  com_id: Int!
+  com_descripcion: String
+  com_estado: Boolean
   aut_id: Int
   pub_id: Int
+  num_likes: counter
 }
 
 type publicacion {
-  id: Int!
+  pub_id: Int!
   cat_id: Int
-  titulo: String
-  descripcion: String
-  estado: Boolean
+  pub_titulo: String
+  pub_descripcion: String
+  pub_estado: Boolean
   aut_id: Int
+  comentarios: [comentario]
+  num_comentarios: counter
+  num_autores: counter
 }
 
 type reaccion {
-  id: Int!
+  rea_id: Int!
   com_id: Int
   aut_id: Int
-  like: Boolean
-  estado: Boolean
+  rea_like: Boolean
+  rea_estado: Boolean
 }
 
-# Consulta: Usuarios, Nombre, Título Publicación, Descripción de la Publicación
-type autor_pubs {
-  autor: autor
-  publicaciones: [publicacion]
-}
-
-# Campos: Id Publicación, Título de Publicación, Usuario del Comentario, Comentario
-type publicacion_coms {
-  publicacion: publicacion
-  comentarios: [comentario]
-}
-
-# Campos: Título Publicación, Número de comentarios
-type publicacion_num_coms {
-  publicacion: publicacion
-  comentarios: Int
-}
-
-# Campos: Título Publicación, Comentario, Número de likes.
-type publicacion_coms_ls {
-  publicacion: publicacion
-  comentarios: [comentario]
-  num_likes: Int
-}
-
-# Campos: Categoría, Título Publicación, Comentario, Número de likes, número de autores de comentarios
-type categoria_pub {
-  categoria: categoria
-  publicacion: publicacion
-  comentario: comentario
-  num_likes: Int
-  num_aut_com: Int
-}
-
-# Campos: autores, categorías, número de publicación, número de sus likes.
-type categoria_pub2 {
-  autores: [autor]
-  categorias: [categoria]
-  num_pub: Int
-  num_likes: Int
+type counter {
+  count: Int
 }
