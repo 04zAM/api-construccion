@@ -17,6 +17,7 @@ const {
   getMovieDetails,
   movie_schema,
   blog_schema,
+  cita_schema,
 } = require("../controllers");
 
 // Rutas
@@ -37,6 +38,9 @@ router
   .get("/movie/api", graphiqlExpress({ endpointURL: "/graphql/movie" }))
   // Blogs
   .post("/graphql/blog", graphqlExpress({ schema: blog_schema }))
-  .get("/blog/api", graphiqlExpress({ endpointURL: "/graphql/blog" }));
+  .get("/blog/api", graphiqlExpress({ endpointURL: "/graphql/blog" }))
+  // Citas
+  .post("/graphql/cita", graphqlExpress({ schema: cita_schema }))
+  .get("/cita/api", graphiqlExpress({ endpointURL: "/graphql/cita" }));
 
 module.exports = router;

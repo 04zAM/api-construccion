@@ -26,7 +26,8 @@ const {
     getMovieDetails,
     movie_schema,
   } = require("./movie"),
-  { blog_schema } = require("./blog");
+  { blog_schema } = require("./blog"),
+  { cita_schema } = require("./cita");
 
 module.exports = {
   getHome,
@@ -42,4 +43,5 @@ module.exports = {
   // GraphQL
   movie_schema,
   blog_schema,
+  cita_schema,
 };

@@ -1,0 +1,87 @@
+# TYPE-SYSTEM
+
+scalar LocalDate
+
+type Mutation {
+  # Insertar datos de pacientes
+  setPacientes(paciente: pacienteInput): paciente
+  # Insertar datos de médico pasar cómo parámetro el nombre de la especialidad al momento de registrar al médico.
+  setMedicos(medico: medicoInput): medico
+  # Insertar datos de citas médicas
+  setCitas(cita: citaInput): cita
+}
+
+input citaInput {
+  pac_id: Int
+  med_id: Int
+  cit_med_fecha: LocalDate
+}
+
+input medicoInput {
+  esp_nombre: String
+  med_identificacion: String
+  med_nombre: String
+  med_telefono: String
+  med_email: String
+  med_direccion: String
+}
+
+input pacienteInput {
+  pac_identificacion: String
+  pac_nombre: String
+  pac_telefono: String
+  pac_email: String
+  pac_direccion: String
+}
+
+type Query {
+  # Consulta de pacientes y citas médicas, nombre médico, especialidad por identificación de paciente
+  getPacientes(id: Int): [paciente]
+  # Consulta de Médicos, Especialidad, Cita Médica, Paciente.
+  getMedicos(id: Int): [medico]
+  # Consulta de Especialidad, Médicos, Cita Médica, Paciente.
+  getEspecialidades(id: Int): [especialidad]
+}
+
+type especialidad {
+  esp_id: Int!
+  esp_nombre: String
+  esp_estado: Boolean
+  medicos: [medico]
+}
+
+type cita {
+  cit_med_id: Int!
+  cit_med_fecha: LocalDate
+  cit_med_agendado: Boolean
+  medico: medico
+  paciente: paciente
+}
+
+type medico {
+  med_id: Int!
+  esp_id: Int
+  med_identificacion: String
+  med_nombre: String
+  med_telefono: String
+  med_email: String
+  med_direccion: String
+  med_estado: Boolean
+  especialidad: especialidad
+  citas: [cita]
+}
+
+type paciente {
+  pac_id: Int!
+  pac_identificacion: String
+  pac_nombre: String
+  pac_telefono: String
+  pac_email: String
+  pac_direccion: String
+  pac_estado: Boolean
+  citas: [cita]
+}
+
+type counter {
+  count: Int
+}
