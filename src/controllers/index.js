@@ -16,11 +16,22 @@ const getListaByTable = async (req, res) => {
 
 // REST Movie
 const {
+    getMovies,
+    postMovie,
+    delMovie,
+    editMovie,
+    // 
     getActores,
     postActores,
     getActorById,
+    delActor,
+    editActor,
+    // 
+    getActorMovie,
     postActorMovie,
-    deleteActor,
+    delActorMovie,
+    editActorMovie,
+    // 
     getActoresByMovie,
     getCountActByMovie,
     getMovieDetails,
@@ -32,11 +43,19 @@ const {
 module.exports = {
   getHome,
   getListaByTable,
+  getMovies,
+  postMovie,
+  delMovie,
+  editMovie,
   getActores,
   postActores,
   getActorById,
+  delActor,
+  editActor,
+  getActorMovie,
   postActorMovie,
-  deleteActor,
+  delActorMovie,
+  editActorMovie,
   getActoresByMovie,
   getCountActByMovie,
   getMovieDetails,

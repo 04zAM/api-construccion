@@ -5,13 +5,26 @@ const { graphqlExpress, graphiqlExpress } = require("graphql-server-express");
 
 // REST
 const {
+  // General
   getHome,
   getListaByTable,
+  // Movies
+  getMovies,
+  postMovie,
+  delMovie,
+  editMovie,
+  // Actors
   getActores,
   postActores,
-  getActorById,
+  delActor,
+  editActor,
+  // Actor Movie
+  getActorMovie,
   postActorMovie,
-  deleteActor,
+  delActorMovie,
+  editActorMovie,
+  // Utils
+  getActorById,
   getActoresByMovie,
   getCountActByMovie,
   getMovieDetails,
@@ -22,13 +35,27 @@ const {
 
 // Rutas
 router
+  //REST
   .get("/", getHome)
   .get("/listar/:name", getListaByTable)
-  .get("/api/actores", getActores)
-  .post("/api/actores", postActores)
-  .get("/api/actorById/:id", getActorById)
+  // Movies
+  // CRUD actores
+  .get("/api/actors", getActores)
+  .post("/api/actors", postActores)
+  .get("/api/del/actor/:act_id", delActor)
+  .post("/api/edit/actor", editActor)
+  // CRUD movies
+  .get("/api/movies", getMovies)
+  .post("/api/movies", postMovie)
+  .get("/api/del/movie/:mov_id", delMovie)
+  .post("/api/edit/movie", editMovie)
+  // CRUD actor_movie
+  .get("/api/actorMovie/:mov_id", getActorMovie)
   .post("/api/actorMovie", postActorMovie)
-  .post("/api/actor", deleteActor)
+  .get("/api/del/actorMovie/:act_mov_id", delActorMovie)
+  .post("/api/edit/actorMovie", editActorMovie)
+  // Utils
+  .get("/api/actorById/:id", getActorById)
   .get("/api/actoresByMovie/:id", getActoresByMovie)
   .get("/api/countActoresByMovie/:id", getCountActByMovie)
   .get("/api/movieDetailed", getMovieDetails)
