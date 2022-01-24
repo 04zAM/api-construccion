@@ -1,5 +1,5 @@
 const pgPromise = require("pg-promise");
-require("dotenv").config();
+// require("dotenv").config();
 
 //Working with Conexion Strings
 const pgp = pgPromise({});
