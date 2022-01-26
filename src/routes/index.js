@@ -31,6 +31,7 @@ const {
   movie_schema,
   blog_schema,
   cita_schema,
+  league_schema,
 } = require("../controllers");
 
 // Rutas
@@ -68,6 +69,9 @@ router
   .get("/blog/api", graphiqlExpress({ endpointURL: "/graphql/blog" }))
   // Citas
   .post("/graphql/cita", graphqlExpress({ schema: cita_schema }))
-  .get("/cita/api", graphiqlExpress({ endpointURL: "/graphql/cita" }));
+  .get("/cita/api", graphiqlExpress({ endpointURL: "/graphql/cita" }))
+  // Leagues
+  .post("/graphql/league", graphqlExpress({ schema: league_schema }))
+  .get("/league/api", graphiqlExpress({ endpointURL: "/graphql/league" }));
 
 module.exports = router;

@@ -10,10 +10,4 @@ app.set("view engine", "ejs");
 
 app.listen(PORT, () => {
   console.log(`Escuchando el puerto ${PORT}`);
-  console.log(`GraphQL-API listen http://localhost:${PORT}/graphql/movie`);
-  console.log(`GraphiQL listen http://localhost:${PORT}/movie/api`);
-  console.log(`GraphQL-API listen http://localhost:${PORT}/graphql/blog`);
-  console.log(`GraphiQL listen http://localhost:${PORT}/blog/api`);
-  console.log(`GraphQL-API listen http://localhost:${PORT}/graphql/cita`);
-  console.log(`GraphiQL listen http://localhost:${PORT}/cita/api`);
 });

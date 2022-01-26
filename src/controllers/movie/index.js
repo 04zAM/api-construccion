@@ -126,7 +126,6 @@ const editActor = async (req, res) => {
 };
 
 // CRUD actors movies
-
 // post actor_movie
 const postActorMovie = async (req, res) => {
   const { mov_id, act_id, act_mov_actor_principal } = req.body;

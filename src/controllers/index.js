@@ -20,25 +20,26 @@ const {
     postMovie,
     delMovie,
     editMovie,
-    // 
+    //
     getActores,
     postActores,
     getActorById,
     delActor,
     editActor,
-    // 
+    //
     getActorMovie,
     postActorMovie,
     delActorMovie,
     editActorMovie,
-    // 
+    //
     getActoresByMovie,
     getCountActByMovie,
     getMovieDetails,
     movie_schema,
   } = require("./movie"),
   { blog_schema } = require("./blog"),
-  { cita_schema } = require("./cita");
+  { cita_schema } = require("./cita"),
+  { league_schema } = require("./league");
 
 module.exports = {
   getHome,
@@ -63,4 +64,5 @@ module.exports = {
   movie_schema,
   blog_schema,
   cita_schema,
+  league_schema,
 };

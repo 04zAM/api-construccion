@@ -1,0 +1,83 @@
+# TYPE-SYSTEM
+
+scalar LocalDate
+
+type Mutation {
+  setTeam(team: teamInput): team
+  updateTeam(tea_id: Int!, team: teamUpdate): team
+  deleteTeam(tea_id: Int!): team
+  setLeague(league: leagueInput): league
+  updateLeague(lea_id: Int!, league: leagueUpdate): league
+  deleteLeague(lea_id: Int!): league
+  setTeamLeague(team_league: team_leagueInput): team_league
+  updateTeamLeague(tea_lea_id: Int!, team_league: team_leagueUpdate): team_league
+  deleteTeamLeague(tea_lea_id: Int!): team_league
+}
+
+input team_leagueInput {
+  lea_id: Int!
+  tea_id: Int!
+  tea_lea_title: Boolean!
+}
+
+input team_leagueUpdate {
+  lea_id: Int
+  tea_id: Int
+  tea_lea_title: Boolean
+}
+
+input leagueInput {
+  lea_name: String!
+  lea_country: String!
+  lea_creation: LocalDate!
+}
+
+input leagueUpdate {
+  lea_name: String
+  lea_country: String
+  lea_creation: LocalDate
+}
+
+input teamInput {
+  tea_name: String!
+  tea_country: String!
+  tea_fundation: LocalDate!
+}
+
+input teamUpdate {
+  tea_name: String
+  tea_country: String
+  tea_fundation: LocalDate
+}
+
+type Query {
+  getTeamLeague(id: Int): [team_league]
+  getLeague(id: Int): [league]
+  getTeam(id: Int): [team]
+}
+
+type team {
+  tea_id: Int!
+  tea_name: String
+  tea_country: String
+  tea_fundation: LocalDate
+  tea_state: Boolean
+  leagues: [league]
+}
+
+type team_league {
+  tea_lea_id: Int!
+  leagues: [league]
+  teams: [team]
+  tea_lea_state: Boolean
+  tea_lea_title: Boolean
+}
+
+type league {
+  lea_id: Int!
+  lea_name: String
+  lea_country: String
+  lea_creation: LocalDate
+  lea_state: Boolean
+  teams: [team]
+}
